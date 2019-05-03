@@ -1,0 +1,151 @@
+image:
+  repository: datadog/agent
+  tag: 6.10.1
+  pullPolicy: IfNotPresent
+
+nameOverride: ""
+fullnameOverride: ""
+
+datadog:
+  # TODO: Refer to some secret builder or secrets.yaml
+  # apiKey: <DATADOG_API_KEY>
+
+  name: datadog
+
+  # TODO: Parameterize
+  logLevel: INFO
+
+  # TODO: Handle all tagging et al, probably as template
+  # podLabelsAsTags:
+  # podAnnotationsAsTags:
+  # tags:
+
+  useCriSocketVolume: true
+  dogstatsdOriginDetection: true
+  useDogStatsDSocketVolume: true
+  collectEvents: true
+  leaderElection: true
+  leaderLeaseDuration: 60
+
+  # TODO: Parameterize Logging to minimal definition
+  logsEnabled: true
+  logsConfigContainerCollectAll: true
+
+  # TODO: Parametrize APM to minimal definition
+  apmEnabled: false
+
+  processAgentEnabled: false
+
+  # TODO: See if DD env vars are actually needed with label/annotation setup and rest of config
+  # env:
+
+  # TODO: Setup hostpath for dogstatsd unix socket
+  # volumes:
+  #   - hostPath:
+  #     path: <HOST_PATH>
+  #     name: <VOLUME_NAME>
+  # volumeMounts:
+  #   - name: <VOLUME_NAME>
+  #     mountPath: <CONTAINER_PATH>
+  #     readOnly: true
+
+  # TODO: Setup additional autodiscovery where needed
+  # confd:
+
+  resources:
+    requests:
+      cpu: 200m
+      memory: 256Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+
+clusterAgent:
+  enabled: true
+  containerName: cluster-agent
+  image:
+    repository: datadog/cluster-agent
+    tag: 1.2.0
+    pullPolicy: IfNotPresent
+
+  # TODO: Draw this from secrets bucket
+  token: "foo"
+
+  replicas: 1
+  metricsProvider:
+    enabled: true
+  clusterChecks:
+    enabled: true
+
+  # TODO: Consider cluster check configurations for autodiscovery
+  # confd:
+
+  resources:
+    requests:
+      cpu: 200m
+      memory: 256Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+
+rbac:
+  create: true
+  serviceAccountName: default
+
+tolerations: []
+
+kubeStateMetrics:
+  # TODO: Disable as this is already supported in env
+  enabled: true
+
+kube-state-metrics:
+  rbac:
+    # TODO: Specify SA name as this is already supported in env
+    create: true
+    serviceAccountName: default
+
+daemonset:
+  enabled: true
+  useHostPID: true
+
+  # TODO: Consider injecting annotations for monitored pods
+  # podAnnotations:
+
+  # TODO: Are selectors really needed?
+  # nodeSelector: {}
+
+deployment:
+  enabled: false
+  replicas: 1
+  affinity: {}
+  tolerations: []
+
+  service:
+    type: ClusterIP
+    annotations: {}
+
+clusterchecksDeployment:
+  enabled: false
+
+  rbac:
+    dedicated: false
+    serviceAccountName: default
+
+  replicas: 2
+
+  resources:
+    requests:
+      cpu: 200m
+      memory: 500Mi
+    limits:
+      cpu: 200m
+      memory: 500Mi
+
+  # TODO: Do we need selector?
+  # nodeSelector: {}
+  tolerations: []
+
+  # TODO: Do we need env vars?
+  # env:
+  #   - name: <ENV_VAR_NAME>
+  #     value: <ENV_VAR_VALUE>
