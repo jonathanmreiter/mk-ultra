@@ -39,7 +39,9 @@ The cases that developers thought to be important to capture:
 `POST https://api.datadoghq.com/api/v1/downtime` is a key feature.
 
 ## 7. Smoothing Alert Fanout
-Developers noted that alerting should have a meta-estimator. We know (x) alerted (y) times, and that is not sufficient to escalate.  We should look at alert recovery predicates as a means to achieve this. Recovery is a state scoped above a single alert trigger. It would be useful for tuning tolerances such to promote auto response or to avoid escalation.
+Developers noted that alerting should have a meta-estimator. We know (x) alerted (y) times, and that is not sufficient to escalate.  We should look at alert recovery predicates as a means to achieve this. 
+
+Recovery is a state scoped above a single alert trigger. It would be useful for tuning tolerances such to promote auto response or to avoid escalation.
 
 ## Observed Gaps
 None so far.
