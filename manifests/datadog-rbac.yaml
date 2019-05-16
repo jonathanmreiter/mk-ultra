@@ -1,0 +1,38 @@
+# This is for the node agent.
+
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRole
+metadata:
+  name: datadog-agent
+rules:
+- nonResourceURLs: 
+  - "/version"  # Used to get apiserver version metadata
+  - "/healthz"  # Healthcheck
+  verbs: ["get"]
+- apiGroups: [""]
+  resources:
+    - "nodes"
+    - "namespaces"  # 
+    - "events"      # Cluster events + kube_service cache invalidation
+    - "services"    # kube_service tag
+  verbs: ["get", "list"]
+---
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: datadog-agent
+  namespace: telemetry
+automountServiceAccountToken: true
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: datadog-agent
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: datadog-agent
+subjects:
+- kind: ServiceAccount
+  name: datadog-agent
+  namespace: telemetry

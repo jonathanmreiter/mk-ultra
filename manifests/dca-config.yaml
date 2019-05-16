@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dca-yaml
+  namespace: telemetry
+  labels:
+    app: "datadog"
+data:
+  datadog.yaml: |-
+  # TODO: Still need to define confd settings and etc.
+  
